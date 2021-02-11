@@ -1,11 +1,11 @@
 import React from "react";
-import {Text, Button, Image} from "react-native-elements";
-import {View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
-import {LinearGradient} from "expo-linear-gradient";
+import { Text, Button, Image } from "react-native-elements";
+import { View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from "react-native-animatable";
 
-const SplashScreen = ({navigation}) => {
+const SplashScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -22,10 +22,10 @@ const SplashScreen = ({navigation}) => {
                 <Text style={styles.title}>Manage your expenses!</Text>
                 <Text>Sign in with your account.</Text>
                 <View style={styles.button}>
-                    <TouchableOpacity onPress={() => navigation.navigate("SignInScreen")}>
+                    <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
                         <LinearGradient colors={["#08D4C4", "#01AB9D"]} style={styles.signIn}>
                             <Text style={styles.textSign}>Get Started</Text>
-                            <MaterialIcons name={"navigate-next"} color="#fff" size={20}/>
+                            <MaterialIcons name={"navigate-next"} color="#fff" size={20} />
                         </LinearGradient>
                     </TouchableOpacity>
                 </View>
@@ -34,7 +34,7 @@ const SplashScreen = ({navigation}) => {
     );
 };
 
-const {height} = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
 const height_logo = height * 0.28;
 
 const styles = StyleSheet.create({

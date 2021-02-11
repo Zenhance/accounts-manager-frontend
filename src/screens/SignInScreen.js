@@ -1,14 +1,14 @@
-import React, {useState} from "react";
-import {Text} from "react-native-elements";
-import {View, StyleSheet, StatusBar, TouchableOpacity, TextInput, ActivityIndicator} from "react-native";
+import React, { useState } from "react";
+import { Text } from "react-native-elements";
+import { View, StyleSheet, StatusBar, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome5";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from "react-native-animatable";
-import {LinearGradient} from "expo-linear-gradient";
-import {AuthContext} from "../providers/AuthProvider";
-import {getLoginToken} from "../requests/LoginRequest";
+import { LinearGradient } from "expo-linear-gradient";
+import { AuthContext } from "../providers/AuthProvider";
+import { getLoginToken } from "../requests/LoginRequest";
 
-const SignInScreen = () => {
+const SignInScreen = ({ navigation }) => {
 
     const [data, setData] = useState({
         name: '',
@@ -72,7 +72,7 @@ const SignInScreen = () => {
             {
                 (auth) => (
                     <View style={styles.container}>
-                        <StatusBar backgroundColor={"#009387"} barStyle={"light-content"}/>
+                        <StatusBar backgroundColor={"#009387"} barStyle={"light-content"} />
                         <View style={styles.header}>
                             <Text style={styles.text_header}>Welcome!</Text>
                         </View>
@@ -83,8 +83,8 @@ const SignInScreen = () => {
                             <Text style={styles.text_footer}>Username</Text>
                             <View style={styles.action}>
                                 <FontAwesomeIcon name={"user"}
-                                                 color={"#05375a"}
-                                                 size={20}
+                                    color={"#05375a"}
+                                    size={20}
                                 />
                                 <TextInput
                                     placeholder={"Username"}
@@ -107,11 +107,11 @@ const SignInScreen = () => {
                                 }
 
                             </View>
-                            <Text style={[styles.text_footer, {marginTop: 35}]}>Password</Text>
+                            <Text style={[styles.text_footer, { marginTop: 35 }]}>Password</Text>
                             <View style={styles.action}>
                                 <Feather name={"lock"}
-                                         color={"#05375a"}
-                                         size={20}
+                                    color={"#05375a"}
+                                    size={20}
                                 />
                                 <TextInput
                                     placeholder={"Your Password"}
@@ -140,7 +140,7 @@ const SignInScreen = () => {
                                 <TouchableOpacity
                                     onPress={async () => {
                                         setLoading(true);
-                                        await getLoginToken(data.name, data.password).then((response)=> {
+                                        await getLoginToken(data.name, data.password).then((response) => {
                                             if (response.ok) {
                                                 auth.setCurrentAdmin(response.data.id);
                                                 auth.setToken(response.data.token);
@@ -157,12 +157,24 @@ const SignInScreen = () => {
                                     style={styles.button}
                                 >
                                     <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                                    style={styles.signIn}>
+                                        style={styles.signIn}>
                                         <Text style={styles.textSign}>Sign In</Text>
                                     </LinearGradient>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={async () => {
+                                        navigation.navigate("SignUpScreen")
+                                    }
+                                    }
+                                    style={styles.button}
+                                >
+                                    <LinearGradient colors={["#08D4C4", "#01AB9D"]}
+                                        style={styles.signIn}>
+                                        <Text style={styles.textSign}>Don't Have an Account? Sign Up!</Text>
+                                    </LinearGradient>
+                                </TouchableOpacity>
 
-                                <ActivityIndicator size={"small"} color={"blue"} animating={loading}/>
+                                <ActivityIndicator size={"small"} color={"blue"} animating={loading} />
 
                             </View>
 
