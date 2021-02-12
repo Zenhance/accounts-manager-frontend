@@ -1,20 +1,22 @@
-import { createMultiStyleIconSet } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { Card } from "react-native-elements"
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { AuthContext } from "../providers/AuthProvider";
-import { Logout } from "../requests/LogoutRequest";
+import React, {useState} from "react";
+import {Card} from "react-native-elements"
+import {View, Text, StyleSheet, TouchableOpacity, Platform, ToastAndroid} from "react-native";
+import {LinearGradient} from "expo-linear-gradient";
+import {AuthContext} from "../providers/AuthProvider";
+import * as firebase from "firebase";
+import "firebase/firestore";
 import * as Animatable from "react-native-animatable";
-import { ScrollView } from "react-native-gesture-handler";
 
-const TransactionScreen = ({ navigation }) => {
+
+const TransactionScreen = ({navigation}) => {
+
+    const [loading, setLoading] = useState(false);
 
     return (
         <AuthContext.Consumer>
             {
                 (auth) => (
-                    <ScrollView>
+
                         <View style={styles.container}>
                             <Animatable.View
                                 animation={"fadeInUpBig"}
@@ -27,43 +29,43 @@ const TransactionScreen = ({ navigation }) => {
                                     <Text style={styles.text_card}>Monthly Transactions</Text>
                                 </Card>
                                 <TouchableOpacity
-                                    onPress={async () => {
-                                        await Logout(auth.token).then((response) => {
-                                            if (response.ok && response.data.status === "success") {
-                                                console.log(response.data);
-                                                auth.setIsLoggedIn(false);
-                                                auth.setToken(null);
-                                                auth.setCurrentAdmin(0);
-                                            }
-                                            else {
-                                                alert("Token Manipulated!");
-                                            }
-                                        });
-
+                                    onPress={()=> {
+                                        setLoading(true);
+                                        firebase.auth().signOut().then(()=>{
+                                            auth.setCurrentAdmin({});
+                                            auth.setIsLoggedIn(false);
+                                            if(Platform.OS==='android')
+                                                ToastAndroid.show("Logged Out",100);
+                                            setLoading(false);
+                                        })
+                                            .catch((err)=>{console.log(err)})
                                     }}
                                     style={styles.button}
                                 >
                                     <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                        style={styles.signIn}>
+                                                    style={styles.signIn}>
                                         <Text style={styles.textSign}>Log Out</Text>
                                     </LinearGradient>
                                 </TouchableOpacity>
                             </Animatable.View>
 
                         </View>
-                    </ScrollView>
+
                 )
             }
-        </AuthContext.Consumer >
+        </AuthContext.Consumer>
 
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#009387'
+        height: "100%",
+        backgroundColor: '#009387',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
+    main_card: {},
     header: {
         flex: 1,
         justifyContent: 'flex-end',
@@ -73,8 +75,7 @@ const styles = StyleSheet.create({
     footer: {
         flex: 3,
         backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        borderRadius: 20,
         paddingHorizontal: 20,
         paddingVertical: 30
     },
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     text_card: {
         color: '#05375a',
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 30,
     },
     action: {
         flexDirection: 'row',
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     signIn: {
-        width: '50%',
+        width: '75%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',

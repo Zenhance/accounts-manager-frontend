@@ -9,8 +9,16 @@ const MainStack = createStackNavigator();
 
 const MainStackScreens = () => {
     return (
-        <MainStack.Navigator headerMode={"none"} initialRouteName={"HomeScreen"}>
-            <MainStack.Screen name={"HomeScreen"} component={HomeTabScreen} />
+        <MainStack.Navigator
+            initialRouteName={"HomeScreen"}
+            screenOptions={{
+                headerStyle:{
+                    backgroundColor:"#009387"
+                },
+                headerTintColor:"#fff"
+            }}
+        >
+            <MainStack.Screen name={"Accounts Manager"} component={HomeTabScreen} />
         </MainStack.Navigator>
 
     );

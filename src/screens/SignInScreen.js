@@ -6,34 +6,32 @@ import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../providers/AuthProvider";
-import { getLoginToken } from "../requests/LoginRequest";
+import * as firebase from "firebase";
+import "firebase/firestore";
 import { ScrollView } from "react-native-gesture-handler";
 
 const SignInScreen = ({ navigation }) => {
 
     const [data, setData] = useState({
-        name: '',
+        email: '',
         password: '',
         checkTextInputChange: false,
         secureTextEntry: true
     });
     const [loading, setLoading] = useState(false);
-    const [responseData, setResponseData] = useState({
-        id: 0,
-        token: null
-    });
 
-    const textInputChange = (val) => {
+
+    const emailChange = (val) => {
         if (val.length !== 0) {
             setData({
                 ...data,
-                name: val,
+                email: val,
                 checkTextInputChange: true
             })
         } else {
             setData({
                 ...data,
-                name: val,
+                email: val,
                 checkTextInputChange: false
             })
         }
@@ -53,20 +51,7 @@ const SignInScreen = ({ navigation }) => {
         });
     };
 
-    // const userLogin = async () => {
-    //     setLoading(true);
-    //     const response = await getLoginToken(data.name, data.password);
-    //     if (response.ok) {
-    //         setResponseData({
-    //             id: response.data.id,
-    //             token: response.data.token
-    //         })
-    //         console.log(responseData);
-    //     } else {
-    //         alert("Wrong User Credentials!");
-    //     }
-    //     setLoading(false);
-    // };
+
 
     return (
         <AuthContext.Consumer>
@@ -82,7 +67,7 @@ const SignInScreen = ({ navigation }) => {
                                 animation={"fadeInUpBig"}
                                 style={styles.footer}
                             >
-                                <Text style={styles.text_footer}>Username</Text>
+                                <Text style={styles.text_footer}>Email</Text>
                                 <View style={styles.action}>
                                     <FontAwesomeIcon name={"user"}
                                         color={"#05375a"}
@@ -93,7 +78,7 @@ const SignInScreen = ({ navigation }) => {
                                         style={styles.textInput}
                                         autoCapitalize={"none"}
                                         onChangeText={(val) => {
-                                            textInputChange(val)
+                                            emailChange(val);
                                         }}
                                     />
 
@@ -142,18 +127,18 @@ const SignInScreen = ({ navigation }) => {
                                     <TouchableOpacity
                                         onPress={async () => {
                                             setLoading(true);
-                                            await getLoginToken(data.name, data.password).then((response) => {
-                                                if (response.ok) {
-                                                    auth.setCurrentAdmin(response.data.id);
-                                                    auth.setToken(response.data.token);
-                                                    auth.setIsLoggedIn(true);
-                                                    console.log(response.data);
-                                                }
-                                                else {
-                                                    alert("Wrong User Credentials!");
+                                            firebase
+                                                .auth()
+                                                .signInWithEmailAndPassword(data.email,data.password)
+                                                .then((creds)=> {
                                                     setLoading(false);
-                                                }
-                                            })
+                                                    auth.setIsLoggedIn(true);
+                                                    auth.setCurrentAdmin(creds.user);
+                                                })
+                                                .catch((error)=>{
+                                                    setLoading(false);
+                                                    alert(error);
+                                                })
                                             setLoading(false);
                                         }
                                         }
@@ -189,6 +174,7 @@ const SignInScreen = ({ navigation }) => {
         </AuthContext.Consumer>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -248,7 +234,7 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     signIn: {
-        width: '50%',
+        width: '85%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
