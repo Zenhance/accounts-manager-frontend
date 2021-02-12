@@ -59,9 +59,12 @@ const SignInScreen = ({ navigation }) => {
                 (auth) => (
                     <ScrollView>
                         <View style={styles.container}>
-                            <StatusBar backgroundColor={"#009387"} barStyle={"light-content"} />
+                            <StatusBar
+                                backgroundColor={"#009387"}
+                                barStyle={"light-content"}
+                            />
                             <View style={styles.header}>
-                                <Text style={styles.text_header}>Welcome!</Text>
+                                <Text style={styles.text_header}> Welcome! </Text>
                             </View>
                             <Animatable.View
                                 animation={"fadeInUpBig"}
@@ -90,13 +93,16 @@ const SignInScreen = ({ navigation }) => {
                                                     color={"green"}
                                                     size={20}
                                                 />
-                                            </Animatable.View> : null
+                                            </Animatable.View>
+                                            :
+                                            null
                                     }
 
                                 </View>
                                 <Text style={[styles.text_footer, { marginTop: 35 }]}>Password</Text>
                                 <View style={styles.action}>
-                                    <Feather name={"lock"}
+                                    <Feather
+                                        name={"lock"}
                                         color={"#05375a"}
                                         size={20}
                                     />
@@ -114,7 +120,9 @@ const SignInScreen = ({ navigation }) => {
                                                     name={"eye-off"}
                                                     color={"grey"}
                                                     size={20}
-                                                /> : <Feather
+                                                />
+                                                :
+                                                <Feather
                                                     name={"eye"}
                                                     color={"black"}
                                                     size={20}
@@ -122,7 +130,6 @@ const SignInScreen = ({ navigation }) => {
                                         }
                                     </TouchableOpacity>
                                 </View>
-
                                 <View>
                                     <TouchableOpacity
                                         onPress={async () => {
@@ -157,7 +164,13 @@ const SignInScreen = ({ navigation }) => {
                                         style={styles.button}
                                     >
                                         <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                            style={styles.signIn}>
+                                            style={{
+                                                width: '75%',
+                                                height: 50,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderRadius: 10
+                                            }}>
                                             <Text style={styles.textSign}>Don't Have an Account? Sign Up!</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
@@ -171,7 +184,7 @@ const SignInScreen = ({ navigation }) => {
                     </ScrollView>
                 )
             }
-        </AuthContext.Consumer>
+        </AuthContext.Consumer >
     );
 };
 

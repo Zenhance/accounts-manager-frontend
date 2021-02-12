@@ -8,7 +8,7 @@ import { Logout } from "../requests/LogoutRequest";
 import * as Animatable from "react-native-animatable";
 import HeaderTop from "../components/HeaderTop";
 
-const ContactScreen = ({ navigation }) => {
+const ProductScreen = ({ navigation }) => {
 
     return (
         <AuthContext.Consumer>
@@ -21,10 +21,10 @@ const ContactScreen = ({ navigation }) => {
                         >
                             {/* flatlist laagbe */}
                             <Card style={styles.footer}>
-                                <Text style={styles.text_footer}>Contact One</Text>
+                                <Text style={styles.text_footer}>Product One</Text>
                             </Card>
                             <Card style={styles.footer}>
-                                <Text style={styles.text_footer}>Contact Two</Text>
+                                <Text style={styles.text_footer}>Product Two</Text>
                             </Card>
                         </Animatable.View>
                     </View>
@@ -106,5 +106,5 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ContactScreen;
+export default ProductScreen;
 
