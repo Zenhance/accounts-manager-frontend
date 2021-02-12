@@ -3,6 +3,7 @@ import { Header } from "react-native-elements";
 import { StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Feather from "react-native-vector-icons/Feather";
+import ProfileScreen from "../screens/ProfileScreen";
 
 
 // import * as firebase from "firebase";
@@ -11,7 +12,7 @@ import Feather from "react-native-vector-icons/Feather";
 import { AuthContext } from "../providers/AuthProvider";
 import { View } from "react-native-animatable";
 
-const HeaderTop = (props) => {
+const HeaderTop = ({ navigation }) => {
     return (
         <AuthContext.Consumer>
             {(auth) => (
@@ -24,6 +25,9 @@ const HeaderTop = (props) => {
                             name={"user"}
                             color={"#fff"}
                             size={20}
+                            onPress={async () => {
+                                navigation.navigate("ProfileScreen")
+                            }}
                         />
                     }
                     centerComponent={{

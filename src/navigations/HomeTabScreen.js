@@ -20,7 +20,7 @@ const HomeTabScreen = () => {
     return (
         <View style={styles.container}>
             <HeaderTop />
-            <HomeTab.Navigator initialRouteName="TransactionScreen">
+            <HomeTab.Navigator initialRouteName="TransactionScreen" barStyle={{ backgroundColor: "#009387" }}>
                 <HomeTab.Screen
                     name="Transactions"
                     component={TransactionScreen}
@@ -75,7 +75,7 @@ const HomeTabScreen = () => {
                 />
                 <HomeTab.Screen
                     name="Product"
-                    component={AddCustomerScreen}
+                    component={ProductScreen}
 
                     options={{
                         tabBarLabel: "Products",
