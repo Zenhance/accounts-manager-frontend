@@ -1,9 +1,8 @@
 import React from "react";
 
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Feather from "react-native-vector-icons/Feather";
 import { StyleSheet } from "react-native";
-
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import { View } from "react-native";
@@ -11,24 +10,20 @@ import { ScrollView } from "react-native-gesture-handler";
 import TransactionScreen from "../screens/TransactionScreen";
 import ContactScreen from "../screens/ContactScreen";
 import AddCustomerScreen from "../screens/AddCustomerScreen";
-import ProductScreen from "../screens/ProductScreen";
-import HeaderTop from "../components/HeaderTop";
 
-const HomeTab = createMaterialBottomTabNavigator();
+const HomeTab = createMaterialTopTabNavigator();
 
 const HomeTabScreen = () => {
     return (
         <View style={styles.container}>
-            <HeaderTop />
-            <HomeTab.Navigator initialRouteName="TransactionScreen" barStyle={{ backgroundColor: "#009387" }}>
+            <HomeTab.Navigator initialRouteName="SignInScreen">
                 <HomeTab.Screen
                     name="Transactions"
                     component={TransactionScreen}
                     options={{
-                        style: {
-                            backgroundColor: "red",
-                        },
                         tabBarLabel: "Transactions",
+                        style: styles.text,
+
                         tabBarIcon: ({ focused }) =>
                             focused ? (
                                 <Feather name="dollar-sign" color="white" size={26} />
@@ -65,7 +60,7 @@ const HomeTabScreen = () => {
                             focused ? (
                                 <Feather name="user-plus" size={26} color="white" />
                             ) : (
-                                    <Feather
+                                    <Ionicons
                                         name="user-plus"
                                         size={22}
                                         color="white"
@@ -73,26 +68,8 @@ const HomeTabScreen = () => {
                                 ),
                     }}
                 />
-                <HomeTab.Screen
-                    name="Product"
-                    component={ProductScreen}
-
-                    options={{
-                        tabBarLabel: "Products",
-                        tabBarIcon: ({ focused }) =>
-                            focused ? (
-                                <Feather name="package" size={26} color="white" />
-                            ) : (
-                                    <Feather
-                                        name="package"
-                                        size={22}
-                                        color="white"
-                                    />
-                                ),
-                    }}
-                />
             </HomeTab.Navigator>
-        </View >
+        </View>
     );
 };
 

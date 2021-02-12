@@ -1,27 +1,36 @@
-import React, { useState } from "react";
-import { Text } from "react-native-elements";
-import { View, StyleSheet, StatusBar, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
+import React, {useState} from "react";
+import {Text} from "react-native-elements";
+import {
+    View,
+    StyleSheet,
+    StatusBar,
+    TouchableOpacity,
+    TextInput,
+    ActivityIndicator,
+    ToastAndroid,
+    Platform
+} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome5";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from "react-native-animatable";
-import { LinearGradient } from "expo-linear-gradient";
-import { AuthContext } from "../providers/AuthProvider";
-import { getLoginToken } from "../requests/LoginRequest";
-import { ScrollView } from "react-native-gesture-handler";
+import {LinearGradient} from "expo-linear-gradient";
+import {AuthContext} from "../providers/AuthProvider";
+import {getLoginToken} from "../requests/LoginRequest";
+import {ScrollView} from "react-native-gesture-handler";
+import * as firebase from "firebase";
+import 'firebase/firestore';
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpScreen = ({navigation}) => {
 
     const [data, setData] = useState({
         name: '',
+        email: '',
         password: '',
         checkTextInputChange: false,
         secureTextEntry: true
     });
     const [loading, setLoading] = useState(false);
-    const [responseData, setResponseData] = useState({
-        id: 0,
-        token: null
-    });
+
 
     const textInputChange = (val) => {
         if (val.length !== 0) {
@@ -39,6 +48,22 @@ const SignUpScreen = ({ navigation }) => {
         }
     };
 
+    const emailChange = (val) => {
+        if (val.length !== 0) {
+            setData({
+                ...data,
+                email: val,
+                checkTextInputChange: true
+            })
+        } else {
+            setData({
+                ...data,
+                email: val,
+                checkTextInputChange: false
+            })
+        }
+    }
+
     const handlePasswordChange = (val) => {
         setData({
             ...data,
@@ -53,31 +78,13 @@ const SignUpScreen = ({ navigation }) => {
         });
     };
 
-    // const userLogin = async () => {
-    //     setLoading(true);
-    //     const response = await getLoginToken(data.name, data.password);
-    //     if (response.ok) {
-    //         setResponseData({
-    //             id: response.data.id,
-    //             token: response.data.token
-    //         })
-    //         console.log(responseData);
-    //     } else {
-    //         alert("Wrong User Credentials!");
-    //     }
-    //     setLoading(false);
-    // };
-
     return (
         <AuthContext.Consumer>
             {
                 (auth) => (
                     <ScrollView>
                         <View style={styles.container}>
-                            <StatusBar
-                                backgroundColor={"#009387"}
-                                barStyle={"light-content"}
-                            />
+                            <StatusBar backgroundColor={"#009387"} barStyle={"light-content"}/>
                             <View style={styles.header}>
                                 <Text style={styles.text_header}>Create An Account</Text>
                             </View>
@@ -87,10 +94,9 @@ const SignUpScreen = ({ navigation }) => {
                             >
                                 <Text style={styles.text_footer}>Username</Text>
                                 <View style={styles.action}>
-                                    <FontAwesomeIcon
-                                        name={"user"}
-                                        color={"#05375a"}
-                                        size={20}
+                                    <FontAwesomeIcon name={"user"}
+                                                     color={"#05375a"}
+                                                     size={20}
                                     />
                                     <TextInput
                                         placeholder={"Username"}
@@ -113,12 +119,24 @@ const SignUpScreen = ({ navigation }) => {
                                     }
 
                                 </View>
-                                <Text style={[styles.text_footer, { marginTop: 35 }]}>Password</Text>
+                                <Text style={[styles.text_footer, {marginTop: 35}]}>Email</Text>
                                 <View style={styles.action}>
-                                    <Feather
-                                        name={"lock"}
-                                        color={"#05375a"}
-                                        size={20}
+                                    <Feather name={"mail"}
+                                             color={"#05375a"}
+                                             size={20}
+                                    />
+                                    <TextInput
+                                        placeholder={"Your Email"}
+                                        style={styles.textInput}
+                                        autoCapitalize={"none"}
+                                        onChangeText={(val) => emailChange(val)}
+                                    />
+                                </View>
+                                <Text style={[styles.text_footer, {marginTop: 35}]}>Password</Text>
+                                <View style={styles.action}>
+                                    <Feather name={"lock"}
+                                             color={"#05375a"}
+                                             size={20}
                                     />
                                     <TextInput
                                         placeholder={"Your Password"}
@@ -143,66 +161,60 @@ const SignUpScreen = ({ navigation }) => {
                                     </TouchableOpacity>
                                 </View>
 
-                                <Text style={[styles.text_footer, { marginTop: 35 }]}>Email</Text>
-                                <View style={styles.action}>
-                                    <Feather name={"mail"}
-                                        color={"#05375a"}
-                                        size={20}
-                                    />
-                                    <TextInput
-                                        placeholder={"Your Email"}
-                                        secureTextEntry={data.secureTextEntry}
-                                        style={styles.textInput}
-                                        autoCapitalize={"none"}
-                                        onChangeText={(val) => handlePasswordChange(val)}
-                                    />
-                                </View>
 
                                 <View>
                                     <TouchableOpacity
-                                        onPress={async () => {
-                                            setLoading(true);
-                                            await getLoginToken(data.name, data.password).then((response) => {
-                                                if (response.ok) {
-                                                    auth.setCurrentAdmin(response.data.id);
-                                                    auth.setToken(response.data.token);
-                                                    auth.setIsLoggedIn(true);
-                                                    console.log(response.data);
-                                                } else {
-                                                    alert("Wrong User Credentials!");
-                                                    setLoading(false);
-                                                }
-                                            })
-                                            setLoading(false);
-                                        }
-                                        }
+                                        onPress={() => {
+
+                                            if (data.name && data.email && data.password) {
+                                                setLoading(true);
+                                                firebase
+                                                    .auth()
+                                                    .createUserWithEmailAndPassword(data.email, data.password)
+                                                    .then((cred) => {
+                                                        cred.user.updateProfile({displayName: data.name}).then(err => console.log(err));
+                                                        firebase
+                                                            .firestore()
+                                                            .collection('users')
+                                                            .doc(cred.user.uid)
+                                                            .set({
+                                                                username: data.name,
+                                                                email: data.email
+                                                            })
+                                                            .then(() => {
+                                                                setLoading(false);
+                                                                if (Platform.OS === 'android')
+                                                                    ToastAndroid.show("Account Created Successfully", 500)
+                                                            })
+                                                    })
+                                                setLoading(false);
+                                                navigation.navigate("SignInScreen");
+                                            } else {
+                                                if (Platform.OS === 'android')
+                                                    ToastAndroid.show("Fill out the necessary fields.", 500)
+                                            }
+                                        }}
                                         style={styles.button}
                                     >
                                         <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                            style={styles.signIn}>
+                                                        style={styles.signup}>
                                             <Text style={styles.textSign}>Sign Up</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        onPress={async () => {
+                                        onPress={() => {
                                             navigation.navigate("SignInScreen")
                                         }
                                         }
                                         style={styles.button}
                                     >
                                         <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                            style={{
-                                                width: '80%',
-                                                height: 50,
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                borderRadius: 10
-                                            }}>
+                                                        style={styles.signup}>
                                             <Text style={styles.textSign}>Already Have an Account? Sign In!</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
 
-                                    <ActivityIndicator size={"small"} color={"blue"} animating={loading} />
+                                    <ActivityIndicator size={"small"} color={"blue"} animating={loading}/>
 
                                 </View>
 
@@ -272,8 +284,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 50
     },
-    signIn: {
-        width: '50%',
+    signup: {
+        width: '85%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
