@@ -7,6 +7,7 @@ import { AuthContext } from "../providers/AuthProvider";
 import { Logout } from "../requests/LogoutRequest";
 import * as Animatable from "react-native-animatable";
 import { ScrollView } from "react-native-gesture-handler";
+import HeaderTop from "../components/HeaderTop";
 
 const TransactionScreen = ({ navigation }) => {
 

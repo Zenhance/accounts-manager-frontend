@@ -7,6 +7,8 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../providers/AuthProvider";
 import { getLoginToken } from "../requests/LoginRequest";
+import HeaderTop from "../components/HeaderTop";
+
 
 const AddCustomerScreen = ({ navigation }) => {
 

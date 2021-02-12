@@ -1,7 +1,8 @@
 import React from "react";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Feather from "react-native-vector-icons/Feather"; import { StyleSheet } from "react-native";
+import Feather from "react-native-vector-icons/Feather";
+import { StyleSheet } from "react-native";
 
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
@@ -10,19 +11,20 @@ import { ScrollView } from "react-native-gesture-handler";
 import TransactionScreen from "../screens/TransactionScreen";
 import ContactScreen from "../screens/ContactScreen";
 import AddCustomerScreen from "../screens/AddCustomerScreen";
+import HeaderTop from "../components/HeaderTop";
 
 const HomeTab = createMaterialTopTabNavigator();
 
 const HomeTabScreen = () => {
     return (
         <View style={styles.container}>
+            <HeaderTop />
             <HomeTab.Navigator initialRouteName="SignInScreen">
                 <HomeTab.Screen
                     name="Transactions"
                     component={TransactionScreen}
                     options={{
                         tabBarLabel: "Transactions",
-                        style: styles.text,
                         tabBarIcon: ({ focused }) =>
                             focused ? (
                                 <Feather name="dollar-sign" color="white" size={26} />

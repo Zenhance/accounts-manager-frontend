@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { AuthContext } from "../providers/AuthProvider";
 import { Logout } from "../requests/LogoutRequest";
 import * as Animatable from "react-native-animatable";
+import HeaderTop from "../components/HeaderTop";
 
 const ContactScreen = ({ navigation }) => {
 
