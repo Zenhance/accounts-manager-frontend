@@ -1,0 +1,3 @@
+npm install @react-navigation/material-top-tabs react-native-tab-view
+npm install @ui-kitten/components
+npm install @eva-design/eva react-native-svg

@@ -146,7 +146,8 @@ const SignInScreen = ({ navigation }) => {
                                                 auth.setToken(response.data.token);
                                                 auth.setIsLoggedIn(true);
                                                 console.log(response.data);
-                                            } else {
+                                            }
+                                            else {
                                                 alert("Wrong User Credentials!");
                                                 setLoading(false);
                                             }

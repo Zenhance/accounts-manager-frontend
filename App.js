@@ -2,27 +2,27 @@
 import React from 'react';
 import AuthStackScreens from "./src/navigations/AuthStackScreens";
 import MainStackScreens from "./src/navigations/MainStackScreens";
-import {NavigationContainer} from "@react-navigation/native";
-import {AuthContext, AuthProvider} from "./src/providers/AuthProvider";
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthContext, AuthProvider } from "./src/providers/AuthProvider";
 
 export default function App() {
-    return (
-        <AuthProvider>
-            <AuthContext.Consumer>
+  return (
+    <AuthProvider>
+      <AuthContext.Consumer>
+        {
+          (auth) => (
+            <NavigationContainer>
               {
-                (auth) => (
-                    <NavigationContainer>
-                      {
-                        auth.isLoggedIn===true
-                            ?
-                            <MainStackScreens/>:<AuthStackScreens/>
-                      }
-                    </NavigationContainer>
-                )
+                auth.isLoggedIn === false
+                  ?
+                  <MainStackScreens /> : <AuthStackScreens />
               }
-            </AuthContext.Consumer>
-        </AuthProvider>
-    );
+            </NavigationContainer>
+          )
+        }
+      </AuthContext.Consumer>
+    </AuthProvider>
+  );
 }
 
 

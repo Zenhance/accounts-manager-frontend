@@ -22,7 +22,7 @@ const SplashScreen = ({ navigation }) => {
                 <Text style={styles.title}>Manage your expenses!</Text>
                 <Text>Sign in with your account.</Text>
                 <View style={styles.button}>
-                    <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
+                    <TouchableOpacity onPress={() => navigation.navigate("SignInScreen")}>
                         <LinearGradient colors={["#08D4C4", "#01AB9D"]} style={styles.signIn}>
                             <Text style={styles.textSign}>Get Started</Text>
                             <MaterialIcons name={"navigate-next"} color="#fff" size={20} />
