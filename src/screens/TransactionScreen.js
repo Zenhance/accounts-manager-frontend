@@ -21,39 +21,40 @@ const TransactionScreen = ({ navigation }) => {
                                 style={styles.footer}
                             >
                                 <Card style={styles.footer}>
-                                    <Text style={styles.text_footer}>Daily Transactions</Text>
+                                    <Text style={styles.text_card} fontWeight="bold">Daily Transactions</Text>
                                 </Card>
                                 <Card style={styles.footer}>
-                                    <Text style={styles.text_footer}>Monthly Transactions</Text>
+                                    <Text style={styles.text_card}>Monthly Transactions</Text>
                                 </Card>
-                            </Animatable.View>
-                            <TouchableOpacity
-                                onPress={async () => {
-                                    await Logout(auth.token).then((response) => {
-                                        if (response.ok && response.data.status === "success") {
-                                            console.log(response.data);
-                                            auth.setIsLoggedIn(false);
-                                            auth.setToken(null);
-                                            auth.setCurrentAdmin(0);
-                                        }
-                                        else {
-                                            alert("Token Manipulated!");
-                                        }
-                                    });
+                                <TouchableOpacity
+                                    onPress={async () => {
+                                        await Logout(auth.token).then((response) => {
+                                            if (response.ok && response.data.status === "success") {
+                                                console.log(response.data);
+                                                auth.setIsLoggedIn(false);
+                                                auth.setToken(null);
+                                                auth.setCurrentAdmin(0);
+                                            }
+                                            else {
+                                                alert("Token Manipulated!");
+                                            }
+                                        });
 
-                                }}
-                                style={styles.button}
-                            >
-                                <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                    style={styles.signIn}>
-                                    <Text style={styles.textSign}>Log Out</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                                    }}
+                                    style={styles.button}
+                                >
+                                    <LinearGradient colors={["#08D4C4", "#01AB9D"]}
+                                        style={styles.signIn}>
+                                        <Text style={styles.textSign}>Log Out</Text>
+                                    </LinearGradient>
+                                </TouchableOpacity>
+                            </Animatable.View>
+
                         </View>
                     </ScrollView>
                 )
             }
-        </AuthContext.Consumer>
+        </AuthContext.Consumer >
 
     );
 };
@@ -85,6 +86,11 @@ const styles = StyleSheet.create({
     text_footer: {
         color: '#05375a',
         fontSize: 18
+    },
+    text_card: {
+        color: '#05375a',
+        fontWeight: 'bold',
+        fontSize: 30
     },
     action: {
         flexDirection: 'row',
