@@ -74,7 +74,10 @@ const SignUpScreen = ({ navigation }) => {
                 (auth) => (
                     <ScrollView>
                         <View style={styles.container}>
-                            <StatusBar backgroundColor={"#009387"} barStyle={"light-content"} />
+                            <StatusBar
+                                backgroundColor={"#009387"}
+                                barStyle={"light-content"}
+                            />
                             <View style={styles.header}>
                                 <Text style={styles.text_header}>Create An Account</Text>
                             </View>
@@ -84,7 +87,8 @@ const SignUpScreen = ({ navigation }) => {
                             >
                                 <Text style={styles.text_footer}>Username</Text>
                                 <View style={styles.action}>
-                                    <FontAwesomeIcon name={"user"}
+                                    <FontAwesomeIcon
+                                        name={"user"}
                                         color={"#05375a"}
                                         size={20}
                                     />
@@ -111,7 +115,8 @@ const SignUpScreen = ({ navigation }) => {
                                 </View>
                                 <Text style={[styles.text_footer, { marginTop: 35 }]}>Password</Text>
                                 <View style={styles.action}>
-                                    <Feather name={"lock"}
+                                    <Feather
+                                        name={"lock"}
                                         color={"#05375a"}
                                         size={20}
                                     />
@@ -186,7 +191,13 @@ const SignUpScreen = ({ navigation }) => {
                                         style={styles.button}
                                     >
                                         <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                            style={styles.signIn}>
+                                            style={{
+                                                width: '80%',
+                                                height: 50,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderRadius: 10
+                                            }}>
                                             <Text style={styles.textSign}>Already Have an Account? Sign In!</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
