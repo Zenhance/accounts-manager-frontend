@@ -7,6 +7,9 @@ import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import TransactionScreen from "../screens/TransactionScreen";
+import ContactScreen from "../screens/ContactScreen";
+import AddCustomerScreen from "../screens/AddCustomerScreen";
 
 const HomeTab = createMaterialTopTabNavigator();
 
@@ -15,8 +18,8 @@ const HomeTabScreen = () => {
         <View style={styles.container}>
             <HomeTab.Navigator initialRouteName="SignInScreen">
                 <HomeTab.Screen
-                    name="Sign In"
-                    component={SignInScreen}
+                    name="Transactions"
+                    component={TransactionScreen}
                     options={{
                         tabBarLabel: "Transactions",
                         style: styles.text,
@@ -29,8 +32,8 @@ const HomeTabScreen = () => {
                     }}
                 />
                 <HomeTab.Screen
-                    name="SignUp"
-                    component={SignUpScreen}
+                    name="Contacts"
+                    component={ContactScreen}
                     options={{
                         tabBarLabel: "Customer List",
                         tabBarIcon: ({ focused }) =>
@@ -47,8 +50,8 @@ const HomeTabScreen = () => {
                 />
 
                 <HomeTab.Screen
-                    name="SignUp2"
-                    component={SignInScreen}
+                    name="AddCustomer"
+                    component={AddCustomerScreen}
 
                     options={{
                         tabBarLabel: "Add Customer",
