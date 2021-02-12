@@ -22,7 +22,7 @@ const HeaderTop = (props) => {
                     leftComponent={
                         < Feather
                             name={"user"}
-                            color={"#05375a"}
+                            color={"#fff"}
                             size={20}
                         />
                     }
@@ -32,13 +32,14 @@ const HeaderTop = (props) => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             fontSize: 20,
-                            fontWeight: "bold"
+                            fontWeight: "bold",
+                            color: "white"
                         }
                     }}
                     rightComponent={
                         < Feather
                             name={"log-out"}
-                            color={"#05375a"}
+                            color={"#fff"}
                             size={20}
                             onPress={() => {
                                 auth.setIsLoggedIn(false);

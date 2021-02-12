@@ -1,6 +1,6 @@
 import React from "react";
 
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Feather from "react-native-vector-icons/Feather";
 import { StyleSheet } from "react-native";
 
@@ -13,17 +13,20 @@ import ContactScreen from "../screens/ContactScreen";
 import AddCustomerScreen from "../screens/AddCustomerScreen";
 import HeaderTop from "../components/HeaderTop";
 
-const HomeTab = createMaterialTopTabNavigator();
+const HomeTab = createMaterialBottomTabNavigator();
 
 const HomeTabScreen = () => {
     return (
         <View style={styles.container}>
             <HeaderTop />
-            <HomeTab.Navigator initialRouteName="SignInScreen">
+            <HomeTab.Navigator initialRouteName="TransactionScreen">
                 <HomeTab.Screen
                     name="Transactions"
                     component={TransactionScreen}
                     options={{
+                        style: {
+                            backgroundColor: "red",
+                        },
                         tabBarLabel: "Transactions",
                         tabBarIcon: ({ focused }) =>
                             focused ? (
@@ -61,7 +64,7 @@ const HomeTabScreen = () => {
                             focused ? (
                                 <Feather name="user-plus" size={26} color="white" />
                             ) : (
-                                    <Ionicons
+                                    <Feather
                                         name="user-plus"
                                         size={22}
                                         color="white"
@@ -70,7 +73,7 @@ const HomeTabScreen = () => {
                     }}
                 />
             </HomeTab.Navigator>
-        </View>
+        </View >
     );
 };
 
