@@ -10,7 +10,6 @@ const MainStack = createStackNavigator();
 const MainStackScreens = () => {
     return (
         <MainStack.Navigator
-            initialRouteName={"HomeScreen"}
             screenOptions={{
                 headerStyle:{
                     backgroundColor:"#009387"

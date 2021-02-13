@@ -1,34 +1,58 @@
-import { createMultiStyleIconSet } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { Card } from "react-native-elements"
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { AuthContext } from "../providers/AuthProvider";
-import { Logout } from "../requests/LogoutRequest";
+import React, {useState, useEffect} from "react";
+import {Button, Card} from "react-native-elements"
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView, LogBox, FlatList} from "react-native";
+import {AuthContext} from "../providers/AuthProvider";
 import * as Animatable from "react-native-animatable";
 import HeaderTop from "../components/HeaderTop";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import {auth} from "firebase";
+import {add} from "react-native-reanimated";
 
-const ContactScreen = ({ navigation }) => {
+const ContactScreen = ({navigation}) => {
+
+    const [contacts,setContacts] = useState({});
+
+    let tempContacts = {};
+    let allContacts = [];
+
+    const loadContacts = (adminID)=>{
+        firebase
+            .firestore()
+            .collection('users')
+            .doc(adminID)
+            .collection('contacts')
+            .get()
+            .then((querySnapshot)=>{
+                allContacts = [];
+                querySnapshot.forEach((doc) => {
+                    tempContacts = doc.data();
+                    tempContacts.id = doc.id;
+                    allContacts.push(tempContacts);
+                });
+                setContacts(allContacts);
+                console.log(allContacts);
+            })
+    }
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+        LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+        loadContacts(firebase.auth().currentUser.uid);
+    }, []);
 
     return (
         <AuthContext.Consumer>
             {
                 (auth) => (
-                    <View style={styles.container}>
-                        <HeaderTop />
+                    <ScrollView style={styles.container} on>
+                        <HeaderTop/>
                         <Animatable.View
                             animation={"fadeInUpBig"}
-                            style={styles.footer}
-                        >
-                            {/* flatlist laagbe */}
-                            <Card style={styles.footer}>
-                                <Text style={styles.text_footer}>Contact One</Text>
-                            </Card>
-                            <Card style={styles.footer}>
-                                <Text style={styles.text_footer}>Contact Two</Text>
-                            </Card>
+                            style={styles.footer}>
+                            <FlatList data={contacts}/>
                         </Animatable.View>
-                    </View>
+                    </ScrollView>
                 )
             }
         </AuthContext.Consumer>
@@ -108,4 +132,3 @@ const styles = StyleSheet.create({
 });
 
 export default ContactScreen;
-
