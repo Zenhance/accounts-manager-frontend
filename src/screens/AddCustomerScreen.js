@@ -13,46 +13,46 @@ import HeaderTop from "../components/HeaderTop";
 const AddCustomerScreen = ({ navigation }) => {
 
     const [data, setData] = useState({
-        name: '',
-        password: '',
+        customer_name:'',
+        customer_contact:'',
+        paid_amount:0,
+        due_amount:0,
         checkTextInputChange: false,
-        secureTextEntry: true
+        checkMobileNumber:false
     });
     const [loading, setLoading] = useState(false);
-    const [responseData, setResponseData] = useState({
-        id: 0,
-        token: null
-    });
 
     const textInputChange = (val) => {
         if (val.length !== 0) {
             setData({
                 ...data,
-                name: val,
+                customer_name: val,
                 checkTextInputChange: true
             })
         } else {
             setData({
                 ...data,
-                name: val,
+                customer_name: val,
                 checkTextInputChange: false
             })
         }
     };
-    // const userLogin = async () => {
-    //     setLoading(true);
-    //     const response = await getLoginToken(data.name, data.password);
-    //     if (response.ok) {
-    //         setResponseData({
-    //             id: response.data.id,
-    //             token: response.data.token
-    //         })
-    //         console.log(responseData);
-    //     } else {
-    //         alert("Wrong User Credentials!");
-    //     }
-    //     setLoading(false);
-    // };
+
+    const mobileNumberChange = (val) => {
+        if(val.length===11){
+            setData({
+                ...data,
+                customer_contact: val,
+                checkMobileNumber: true
+            })
+        }else {
+            setData({
+                ...data,
+                customer_contact: val,
+                checkMobileNumber: false
+            })
+        }
+    }
 
     return (
         <AuthContext.Consumer>
@@ -77,7 +77,7 @@ const AddCustomerScreen = ({ navigation }) => {
                                     <TextInput
                                         placeholder={"Name"}
                                         style={styles.textInput}
-                                        autoCapitalize={"none"}
+                                        autoCapitalize={"words"}
                                         onChangeText={(val) => {
                                             textInputChange(val)
                                         }}
@@ -97,20 +97,40 @@ const AddCustomerScreen = ({ navigation }) => {
                                 </View>
                                 <Text style={[styles.text_footer, { marginTop: 35 }]}>Contact</Text>
                                 <View style={styles.action}>
-                                    <Feather name={"lock"}
+                                    <Feather name={"phone"}
                                         color={"#05375a"}
                                         size={20}
                                     />
                                     <TextInput
-                                        placeholder={"Add Details"}
+                                        placeholder={"Mobile No"}
                                         style={styles.textInput}
                                         autoCapitalize={"none"}
+                                        onChangeText={(val)=>{
+                                            mobileNumberChange(val)
+                                        }}
                                     />
+                                    {
+                                        data.checkMobileNumber?
+                                            <Animatable.View animation={"bounceIn"}>
+                                                <Feather
+                                                    name={"check-circle"}
+                                                    color={"green"}
+                                                    size={20}
+                                                />
+                                            </Animatable.View> :
+                                            <Animatable.View animation={"shake"}>
+                                                <Feather
+                                                    name={"x-circle"}
+                                                    color={"red"}
+                                                    size={20}
+                                                    />
+                                            </Animatable.View>
+                                    }
                                 </View>
 
                                 <Text style={[styles.text_footer, { marginTop: 35 }]}>Amount Due</Text>
                                 <View style={styles.action}>
-                                    <Feather name={"mail"}
+                                    <Feather name={"dollar-sign"}
                                         color={"#05375a"}
                                         size={20}
                                     />
@@ -118,12 +138,13 @@ const AddCustomerScreen = ({ navigation }) => {
                                         placeholder={"Enter Amount"}
                                         style={styles.textInput}
                                         autoCapitalize={"none"}
+
                                     />
                                 </View>
 
                                 <Text style={[styles.text_footer, { marginTop: 35 }]}>Amount Paid</Text>
                                 <View style={styles.action}>
-                                    <Feather name={"mail"}
+                                    <Feather name={"dollar-sign"}
                                         color={"#05375a"}
                                         size={20}
                                     />
@@ -168,7 +189,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
-        paddingBottom: 50
+        paddingTop: 50
     },
     footer: {
         flex: 3,
@@ -179,7 +200,7 @@ const styles = StyleSheet.create({
         paddingVertical: 30
     },
     text_header: {
-        color: '#fff',
+        color: '#05375a',
         fontWeight: 'bold',
         fontSize: 30
     },
