@@ -20,7 +20,7 @@ import HeaderTop from "../components/HeaderTop";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import TransactionScreen from "./TransactionScreen"
-import {err} from "react-native-svg/lib/typescript/xml";
+
 
 const AddCustomerScreen = ({navigation}) => {
 
@@ -214,6 +214,7 @@ const AddCustomerScreen = ({navigation}) => {
                                                         customer_contact: data.customer_contact,
                                                         total_due_amount: data.due_amount,
                                                         total_paid_amount: data.paid_amount,
+                                                        date: new Date().getDate()+'-'+new Date().getMonth()+'-'+new Date().getFullYear()
                                                     })
                                             }
                                             else
