@@ -34,6 +34,21 @@ const HomeTabScreen = () => {
                     }}
                 />
                 <HomeTab.Screen
+                    name="AddTransactions"
+                    component={AddTransactionScreen}
+                    options={{
+                        tabBarLabel: "Add Transactions",
+                        style: styles.text,
+
+                        tabBarIcon: ({ focused }) =>
+                            focused ? (
+                                <Feather name="dollar-sign" color="white" size={26} />
+                            ) : (
+                                    <Feather name="dollar-sign" color="white" size={22} />
+                                ),
+                    }}
+                />
+                <HomeTab.Screen
                     name="Contacts"
                     component={ContactScreen}
                     options={{

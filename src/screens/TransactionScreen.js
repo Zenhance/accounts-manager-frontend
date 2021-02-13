@@ -77,7 +77,7 @@ const TransactionScreen = ({ navigation }) => {
 
                         </Card>
                         <TouchableOpacity onPress={() => {
-                            navigation.navigate("AddTransactionScreen")
+                            navigation.navigate(AddTransactionScreen)
                         }}>
                             <LinearGradient
                                 colors={["#08D4C4", "#01AB9D"]}
