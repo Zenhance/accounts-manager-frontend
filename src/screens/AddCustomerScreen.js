@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-import { Text } from "react-native-elements";
-import { View, StyleSheet, StatusBar, TouchableOpacity, TextInput, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
+import React, {useState} from "react";
+import {Text} from "react-native-elements";
+import {
+    View,
+    StyleSheet,
+    StatusBar,
+    TouchableOpacity,
+    TextInput,
+    ActivityIndicator,
+    SafeAreaView,
+    ScrollView,
+    Platform, ToastAndroid
+} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome5";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from "react-native-animatable";
-import { LinearGradient } from "expo-linear-gradient";
-import { AuthContext } from "../providers/AuthProvider";
-import { getLoginToken } from "../requests/LoginRequest";
+import {LinearGradient} from "expo-linear-gradient";
+import {AuthContext} from "../providers/AuthProvider";
 import HeaderTop from "../components/HeaderTop";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import TransactionScreen from "./TransactionScreen"
+import {err} from "react-native-svg/lib/typescript/xml";
 
-
-const AddCustomerScreen = ({ navigation }) => {
+const AddCustomerScreen = ({navigation}) => {
 
     const [data, setData] = useState({
         customer_name: '',
@@ -60,8 +72,8 @@ const AddCustomerScreen = ({ navigation }) => {
                 (auth) => (
                     <ScrollView>
                         <View style={styles.container}>
-                            <HeaderTop />
-                            <StatusBar backgroundColor={"#009387"} barStyle={"light-content"} />
+                            <HeaderTop/>
+                            <StatusBar backgroundColor={"#009387"} barStyle={"light-content"}/>
                             <View style={styles.header}>
                                 <Text style={styles.text_header}>Add A Customer</Text>
                             </View>
@@ -72,8 +84,8 @@ const AddCustomerScreen = ({ navigation }) => {
                                 <Text style={styles.text_footer}>Name</Text>
                                 <View style={styles.action}>
                                     <FontAwesomeIcon name={"user"}
-                                        color={"#05375a"}
-                                        size={20}
+                                                     color={"#05375a"}
+                                                     size={20}
                                     />
                                     <TextInput
                                         placeholder={"Name"}
@@ -96,11 +108,11 @@ const AddCustomerScreen = ({ navigation }) => {
                                     }
 
                                 </View>
-                                <Text style={[styles.text_footer, { marginTop: 35 }]}>Contact</Text>
+                                <Text style={[styles.text_footer, {marginTop: 35}]}>Contact</Text>
                                 <View style={styles.action}>
                                     <Feather name={"phone"}
-                                        color={"#05375a"}
-                                        size={20}
+                                             color={"#05375a"}
+                                             size={20}
                                     />
                                     <TextInput
                                         placeholder={"Mobile No"}
@@ -109,6 +121,8 @@ const AddCustomerScreen = ({ navigation }) => {
                                         onChangeText={(val) => {
                                             mobileNumberChange(val)
                                         }}
+                                        keyboardType={"number-pad"}
+                                        maxLength={11}
                                     />
                                     {
                                         data.checkMobileNumber ?
@@ -129,46 +143,93 @@ const AddCustomerScreen = ({ navigation }) => {
                                     }
                                 </View>
 
-                                <Text style={[styles.text_footer, { marginTop: 35 }]}>Amount Due</Text>
+                                <Text style={[styles.text_footer, {marginTop: 35}]}>Amount Due</Text>
                                 <View style={styles.action}>
                                     <Feather name={"dollar-sign"}
-                                        color={"#05375a"}
-                                        size={20}
+                                             color={"#05375a"}
+                                             size={20}
                                     />
                                     <TextInput
                                         placeholder={"Enter Amount"}
                                         style={styles.textInput}
                                         autoCapitalize={"none"}
-
+                                        keyboardType={"number-pad"}
+                                        onChangeText={(val) => {
+                                            setData({
+                                                ...data,
+                                                due_amount: Number(val)
+                                            });
+                                        }}
                                     />
                                 </View>
 
-                                <Text style={[styles.text_footer, { marginTop: 35 }]}>Amount Paid</Text>
+                                <Text style={[styles.text_footer, {marginTop: 35}]}>Amount Paid</Text>
                                 <View style={styles.action}>
                                     <Feather name={"dollar-sign"}
-                                        color={"#05375a"}
-                                        size={20}
+                                             color={"#05375a"}
+                                             size={20}
                                     />
                                     <TextInput
                                         placeholder={"Enter Amount"}
                                         style={styles.textInput}
                                         autoCapitalize={"none"}
+                                        keyboardType={"number-pad"}
+                                        onChangeText={(val) => {
+                                            setData({
+                                                ...data,
+                                                paid_amount: Number(val)
+                                            });
+                                        }}
                                     />
                                 </View>
 
                                 <View>
                                     <TouchableOpacity
-                                        onPress={async () => {
-                                        }
-                                        }
+                                        onPress={() => {
+                                            if (data.customer_name && (data.customer_contact.length === 11)) {
+                                                firebase
+                                                    .firestore()
+                                                    .collection('users')
+                                                    .doc(auth.currentAdmin.uid)
+                                                    .collection('contacts')
+                                                    .add({
+                                                        customer_name: data.customer_name,
+                                                        customer_contact: data.customer_contact,
+                                                        total_due_amount: data.due_amount,
+                                                        total_paid_amount: data.paid_amount
+                                                    })
+                                                    .then(() => {
+                                                        if (Platform.OS === 'android')
+                                                            ToastAndroid.show("Customer added successfully!", 100);
+                                                        navigation.navigate("Transactions");
+                                                    })
+                                                    .catch((err)=>{console.log(err)});
+                                                firebase
+                                                    .firestore()
+                                                    .collection('users')
+                                                    .doc(auth.currentAdmin.uid)
+                                                    .collection('transactions')
+                                                    .add({
+                                                        customer_name: data.customer_name,
+                                                        customer_contact: data.customer_contact,
+                                                        total_due_amount: data.due_amount,
+                                                        total_paid_amount: data.paid_amount,
+                                                    })
+                                            }
+                                            else
+                                            {
+                                                if (Platform.OS === 'android')
+                                                    ToastAndroid.show("Check name and mobile number.", 100);
+                                            }
+                                        }}
                                         style={styles.button}
                                     >
                                         <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                            style={styles.signIn}>
+                                                        style={styles.signIn}>
                                             <Text style={styles.textSign}>Add Customer</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
-                                    <ActivityIndicator size={"small"} color={"blue"} animating={loading} />
+                                    <ActivityIndicator size={"small"} color={"blue"} animating={loading}/>
 
                                 </View>
 
