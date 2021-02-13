@@ -1,14 +1,15 @@
-import React, {useState} from "react";
-import {Card} from "react-native-elements"
-import {View, Text, StyleSheet, TouchableOpacity, Platform, ToastAndroid} from "react-native";
-import {LinearGradient} from "expo-linear-gradient";
-import {AuthContext} from "../providers/AuthProvider";
+import React, { useState } from "react";
+import { Card } from "react-native-elements"
+import { View, Text, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { AuthContext } from "../providers/AuthProvider";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import * as Animatable from "react-native-animatable";
+import HeaderTop from "../components/HeaderTop";
 
 
-const TransactionScreen = ({navigation}) => {
+const TransactionScreen = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
 
@@ -17,39 +18,40 @@ const TransactionScreen = ({navigation}) => {
             {
                 (auth) => (
 
-                        <View style={styles.container}>
-                            <Animatable.View
-                                animation={"fadeInUpBig"}
-                                style={styles.footer}
+                    <View style={styles.container}>
+                        <HeaderTop />
+                        <Animatable.View
+                            animation={"fadeInUpBig"}
+                            style={styles.footer}
+                        >
+                            <Card style={styles.footer}>
+                                <Text style={styles.text_card} fontWeight="bold">Daily Transactions</Text>
+                            </Card>
+                            <Card style={styles.footer}>
+                                <Text style={styles.text_card}>Monthly Transactions</Text>
+                            </Card>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setLoading(true);
+                                    firebase.auth().signOut().then(() => {
+                                        auth.setCurrentAdmin({});
+                                        auth.setIsLoggedIn(false);
+                                        if (Platform.OS === 'android')
+                                            ToastAndroid.show("Logged Out", 100);
+                                        setLoading(false);
+                                    })
+                                        .catch((err) => { console.log(err) })
+                                }}
+                                style={styles.button}
                             >
-                                <Card style={styles.footer}>
-                                    <Text style={styles.text_card} fontWeight="bold">Daily Transactions</Text>
-                                </Card>
-                                <Card style={styles.footer}>
-                                    <Text style={styles.text_card}>Monthly Transactions</Text>
-                                </Card>
-                                <TouchableOpacity
-                                    onPress={()=> {
-                                        setLoading(true);
-                                        firebase.auth().signOut().then(()=>{
-                                            auth.setCurrentAdmin({});
-                                            auth.setIsLoggedIn(false);
-                                            if(Platform.OS==='android')
-                                                ToastAndroid.show("Logged Out",100);
-                                            setLoading(false);
-                                        })
-                                            .catch((err)=>{console.log(err)})
-                                    }}
-                                    style={styles.button}
-                                >
-                                    <LinearGradient colors={["#08D4C4", "#01AB9D"]}
-                                                    style={styles.signIn}>
-                                        <Text style={styles.textSign}>Log Out</Text>
-                                    </LinearGradient>
-                                </TouchableOpacity>
-                            </Animatable.View>
+                                <LinearGradient colors={["#08D4C4", "#01AB9D"]}
+                                    style={styles.signIn}>
+                                    <Text style={styles.textSign}>Log Out</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </Animatable.View>
 
-                        </View>
+                    </View>
 
                 )
             }

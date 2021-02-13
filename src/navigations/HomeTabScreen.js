@@ -10,6 +10,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import TransactionScreen from "../screens/TransactionScreen";
 import ContactScreen from "../screens/ContactScreen";
 import AddCustomerScreen from "../screens/AddCustomerScreen";
+import ProductScreen from "../screens/ProductScreen";
 
 const HomeTab = createMaterialTopTabNavigator();
 
@@ -65,6 +66,22 @@ const HomeTabScreen = () => {
                                         size={22}
                                         color="white"
                                     />
+                                ),
+                    }}
+                />
+
+                <HomeTab.Screen
+                    name="Products"
+                    component={ProductScreen}
+                    options={{
+                        tabBarLabel: "Products",
+                        style: styles.text,
+
+                        tabBarIcon: ({ focused }) =>
+                            focused ? (
+                                <Feather name="dollar-sign" color="white" size={26} />
+                            ) : (
+                                    <Feather name="dollar-sign" color="white" size={22} />
                                 ),
                     }}
                 />

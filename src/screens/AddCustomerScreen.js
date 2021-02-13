@@ -13,12 +13,12 @@ import HeaderTop from "../components/HeaderTop";
 const AddCustomerScreen = ({ navigation }) => {
 
     const [data, setData] = useState({
-        customer_name:'',
-        customer_contact:'',
-        paid_amount:0,
-        due_amount:0,
+        customer_name: '',
+        customer_contact: '',
+        paid_amount: 0,
+        due_amount: 0,
         checkTextInputChange: false,
-        checkMobileNumber:false
+        checkMobileNumber: false
     });
     const [loading, setLoading] = useState(false);
 
@@ -39,13 +39,13 @@ const AddCustomerScreen = ({ navigation }) => {
     };
 
     const mobileNumberChange = (val) => {
-        if(val.length===11){
+        if (val.length === 11) {
             setData({
                 ...data,
                 customer_contact: val,
                 checkMobileNumber: true
             })
-        }else {
+        } else {
             setData({
                 ...data,
                 customer_contact: val,
@@ -60,6 +60,7 @@ const AddCustomerScreen = ({ navigation }) => {
                 (auth) => (
                     <ScrollView>
                         <View style={styles.container}>
+                            <HeaderTop />
                             <StatusBar backgroundColor={"#009387"} barStyle={"light-content"} />
                             <View style={styles.header}>
                                 <Text style={styles.text_header}>Add A Customer</Text>
@@ -105,12 +106,12 @@ const AddCustomerScreen = ({ navigation }) => {
                                         placeholder={"Mobile No"}
                                         style={styles.textInput}
                                         autoCapitalize={"none"}
-                                        onChangeText={(val)=>{
+                                        onChangeText={(val) => {
                                             mobileNumberChange(val)
                                         }}
                                     />
                                     {
-                                        data.checkMobileNumber?
+                                        data.checkMobileNumber ?
                                             <Animatable.View animation={"bounceIn"}>
                                                 <Feather
                                                     name={"check-circle"}
@@ -123,7 +124,7 @@ const AddCustomerScreen = ({ navigation }) => {
                                                     name={"x-circle"}
                                                     color={"red"}
                                                     size={20}
-                                                    />
+                                                />
                                             </Animatable.View>
                                     }
                                 </View>

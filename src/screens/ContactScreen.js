@@ -15,6 +15,7 @@ const ContactScreen = ({ navigation }) => {
             {
                 (auth) => (
                     <View style={styles.container}>
+                        <HeaderTop />
                         <Animatable.View
                             animation={"fadeInUpBig"}
                             style={styles.footer}
