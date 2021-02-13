@@ -29,7 +29,7 @@ export default function App() {
               {
                 auth.isLoggedIn === false
                   ?
-                    <AuthStackScreens /> : <MainStackScreens />
+                    <AuthStackScreens /> : <MainStackScreens/>
               }
             </NavigationContainer>
           )
