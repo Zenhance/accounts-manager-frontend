@@ -15,7 +15,8 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import * as Animatable from "react-native-animatable";
 import HeaderTop from "../components/HeaderTop";
-import {auth} from "firebase";
+import { auth } from "firebase";
+import AddTransactionScreen from "../screens/AddTransactionScreen";
 
 const TransactionScreen = ({ navigation }) => {
     const [data, setData] = useState({
@@ -27,12 +28,12 @@ const TransactionScreen = ({ navigation }) => {
         checkMobileNumber: false,
     });
     const [loading, setLoading] = useState(false);
-    const [totalDailyDue,setTotalDailyDue] = useState(0);
-    const [totalDailyPaid,setTotalDailyPaid] = useState(0);
+    const [totalDailyDue, setTotalDailyDue] = useState(0);
+    const [totalDailyPaid, setTotalDailyPaid] = useState(0);
     let total_due = 0;
     let total_paid = 0;
 
-    let date = new Date().getDate()+'-'+new Date().getMonth()+'-'+new Date().getFullYear();
+    let date = new Date().getDate() + '-' + new Date().getMonth() + '-' + new Date().getFullYear();
 
     const loadTransactions = () => {
         firebase
@@ -75,6 +76,16 @@ const TransactionScreen = ({ navigation }) => {
                             <Text style={styles.text_card}>Monthly Transactions</Text>
 
                         </Card>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("AddTransactionScreen")
+                        }}>
+                            <LinearGradient
+                                colors={["#08D4C4", "#01AB9D"]}
+                                style={styles.signIn}
+                            >
+                                <Text style={styles.textSign}>Add</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
                                 setLoading(true);
